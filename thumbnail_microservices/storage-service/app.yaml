@@ -1,0 +1,6 @@
+runtime: nodejs18
+service: storage-service
+env_variables:
+  PORT: 8080
+  GCS_BUCKET: your-gcs-bucket-name
+  GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json

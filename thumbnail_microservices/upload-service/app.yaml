@@ -1,0 +1,5 @@
+runtime: nodejs18
+service: upload-service
+env_variables:
+  PORT: 8080
+  THUMBNAIL_SERVICE_URL: https://thumbnail-service-dot-acs-course-455713.ew.r.appspot.com/process
