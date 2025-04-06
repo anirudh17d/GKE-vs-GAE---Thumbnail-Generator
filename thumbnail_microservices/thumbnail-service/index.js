@@ -10,37 +10,38 @@ const app = express();
 app.use(fileUpload());
 
 app.post("/process", async (req, res) => {
-  try {
-    const file = req.files.image;
-    const userId = req.body.user;
-    const originalId = uuid();
-    const sizes = [100, 300, 600];
-    const results = [];
+	try {
+		const file = req.files.image;
+		const userId = req.body.user;
+		const originalId = uuid();
+		const sizes = [100, 300, 600];
+		const results = [];
 
-    for (const size of sizes) {
-      const filename = `${originalId}_${size}.jpg`;
-      try{
-        const buffer = await sharp(file.data).resize(size).toBuffer();
+		for (const size of sizes) {
+			const filename = `${originalId}_${size}.jpg`;
+			let buffer;
+			try {
+				buffer = await sharp(file.data).resize(size).toBuffer();
+			} catch (err) {
+				console.error("Error processing image:", err);
+				return res.status(500).send("Error processing image");
+			}
 
-      }
-      catch (err) {
-        console.error("Error processing image:", err);
-        return res.status(500).send("Error processing image");
-      }
+			const response = await axios.post(
+				process.env.STORAGE_SERVICE_URL,
+				{ buffer: buffer.toString("base64"), filename },
+				{ headers: { "Content-Type": "application/json" } }
+			);
 
-      const response = await axios.post(
-        process.env.STORAGE_SERVICE_URL,
-        { buffer: buffer.toString("base64"), filename },
-        { headers: { "Content-Type": "application/json" } }
-      );
+			results.push({ size, url: response.data.url });
+		}
 
-      results.push({ size, url: response.data.url });
-    }
-
-    res.json({ originalName: file.name, thumbnails: results });
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
+		res.json({ originalName: file.name, thumbnails: results });
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
 });
 
-app.listen(process.env.PORT || 3002, () => console.log("Thumbnail Service running"));
+app.listen(process.env.PORT || 3002, () =>
+	console.log("Thumbnail Service running")
+);
