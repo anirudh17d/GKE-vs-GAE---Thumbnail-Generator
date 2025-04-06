@@ -1,5 +1,10 @@
-runtime: nodejs18
 service: thumbnail-service
+runtime: custom
+env: flex
+
 env_variables:
-  PORT: 8080
-  STORAGE_SERVICE_URL: https://storage-service-dot-acs-course-455713.ew.r.appspot.com/store
+  STORAGE_SERVICE_URL: https://storage-service-dot-thumbnail-app-acs-2025.ey.r.appspot.com/store
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2

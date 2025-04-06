@@ -1,6 +1,11 @@
-runtime: nodejs18
 service: storage-service
+runtime: custom
+env: flex
+
 env_variables:
-  PORT: 8080
-  GCS_BUCKET: your-gcs-bucket-name
-  GOOGLE_APPLICATION_CREDENTIALS: service-account-key.json
+  GCS_BUCKET: thumbnail-uploads-acs
+  GOOGLE_APPLICATION_CREDENTIALS: thumbnail-app-acs-2025-3b06f94a8f55.json
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2

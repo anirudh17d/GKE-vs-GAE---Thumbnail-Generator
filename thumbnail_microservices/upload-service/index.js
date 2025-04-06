@@ -9,6 +9,19 @@ const app = express();
 app.use(express.json());
 app.use(fileUpload());
 
+app.get("/", (req, res) => {
+  res.send(`
+    <h2>📤 Upload Image</h2>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+      <label>User ID:</label><br />
+      <input type="text" name="user" required /><br /><br />
+      <label>Select image:</label><br />
+      <input type="file" name="image" accept="image/*" required /><br /><br />
+      <button type="submit">Upload</button>
+    </form>
+  `);
+});
+
 app.post("/upload", async (req, res) => {
   try {
     if (!req.files || !req.files.image) {
@@ -16,17 +29,19 @@ app.post("/upload", async (req, res) => {
     }
 
     const formData = new FormData();
-    formData.append("image", req.files.image.data, req.files.image.name); // req.files.image.data is a Buffer
+    formData.append("image", req.files.image.data, req.files.image.name);
     formData.append("user", req.body.user);
 
     const response = await axios.post(process.env.THUMBNAIL_SERVICE_URL, formData, {
-      headers: formData.getHeaders(), // Automatically sets the correct Content-Type
+      headers: formData.getHeaders()
     });
 
     res.json(response.data);
   } catch (err) {
-    res.status(500).send(err.message);
+    console.error("Upload failed:", err);
+    res.status(500).send("Upload failed: " + err.message);
   }
 });
 
-app.listen(process.env.PORT || 3001, () => console.log("Upload Service running"));
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log("Upload Service running on port " + port));
