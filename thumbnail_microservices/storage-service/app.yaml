@@ -1,11 +1,8 @@
-service: storage-service
-runtime: custom
-env: flex
+runtime: nodejs20
+entrypoint: node index.cjs
 
-env_variables:
-  GCS_BUCKET: thumbnail-uploads-acs
-  GOOGLE_APPLICATION_CREDENTIALS: thumbnail-app-acs-2025-3b06f94a8f55.json
+env: standard
 
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 2
+handlers:
+  - url: /.*
+    script: auto

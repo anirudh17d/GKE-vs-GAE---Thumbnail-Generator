@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thumbnail Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Thumbnail Generator</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="text" name="user" placeholder="Enter your username" required />
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("upload-form");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      result.innerHTML = "<p>Uploading...</p>";
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch("/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Upload failed");
+
+        const json = await res.json();
+        result.innerHTML = `<h2>Thumbnails for <i>${json.originalName}</i></h2>`;
+        json.thumbnails.forEach((thumb) => {
+          result.innerHTML += `
+            <div class="thumbnail">
+              <div><strong>${thumb.size}px:</strong></div>
+              <img src="${thumb.url}" alt="Thumbnail ${thumb.size}" />
+              <a href="${thumb.url}" target="_blank">Open in new tab</a>
+            </div>
+          `;
+        });
+      } catch (err) {
+        result.innerHTML = `<p style="color: red;">${err.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>

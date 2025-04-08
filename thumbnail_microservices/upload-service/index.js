@@ -3,23 +3,16 @@ import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import axios from "axios";
 import FormData from "form-data";
+import path from "path";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(fileUpload());
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.send(`
-    <h2>📤 Upload Image</h2>
-    <form method="POST" action="/upload" enctype="multipart/form-data">
-      <label>User ID:</label><br />
-      <input type="text" name="user" required /><br /><br />
-      <label>Select image:</label><br />
-      <input type="file" name="image" accept="image/*" required /><br /><br />
-      <button type="submit">Upload</button>
-    </form>
-  `);
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.post("/upload", async (req, res) => {
@@ -33,10 +26,17 @@ app.post("/upload", async (req, res) => {
     formData.append("user", req.body.user);
 
     const response = await axios.post(process.env.THUMBNAIL_SERVICE_URL, formData, {
-      headers: formData.getHeaders()
+      headers: formData.getHeaders(),
     });
 
-    res.json(response.data);
+    // Send data to result.html using query string or client-side fetch
+    res.send(`
+      <script>
+        const data = ${JSON.stringify(response.data)};
+        localStorage.setItem("uploadResult", JSON.stringify(data));
+        window.location.href = "/result.html";
+      </script>
+    `);
   } catch (err) {
     console.error("Upload failed:", err);
     res.status(500).send("Upload failed: " + err.message);

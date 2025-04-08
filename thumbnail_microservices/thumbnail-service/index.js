@@ -51,9 +51,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log("Thumbnail Service running on port " + port);
 });
-
-if (!req.files || !req.files.image) {
-  console.log("⚠️ No image uploaded!");
-  return res.status(400).send("No image provided");
-}
-
