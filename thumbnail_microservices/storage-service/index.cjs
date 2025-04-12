@@ -16,9 +16,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // GCS config
 const storage = new Storage({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  keyFilename: path.join(__dirname, 'thumbnail-app-acs-2025-3b06f94a8f55.json'), // Path to your service account key
 });
-const bucket = storage.bucket(process.env.GCS_BUCKET);
+const bucket = storage.bucket('thumbnail-uploads-acs'); 
 
 // Serve homepage
 app.get('/', (req, res) => {
