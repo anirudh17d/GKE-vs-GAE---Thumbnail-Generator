@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <title>Upload Result</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/result.css" />
 </head>
 <body>
-  <h2>🎉 Upload Successful</h2>
-  <div id="results"></div>
-  <a href="/">⬅ Back to Upload</a>
-
+  <div class="container">
+    <div class="theme-toggle">
+      <label>
+        <input type="checkbox" id="theme-switch">
+        <span class="slider"></span> 🌞 / 🌙
+      </label>
+    </div>
+    <div id="result-container"></div>
+  </div>
   <script src="/result.js"></script>
 </body>
 </html>
