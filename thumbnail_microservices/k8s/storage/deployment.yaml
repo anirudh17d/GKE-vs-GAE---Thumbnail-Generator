@@ -16,4 +16,27 @@ spec:
       - name: storage
         image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/storage-service
         ports:
-        - containerPort: 3003
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        volumeMounts:
+        - name: gcp-key
+          mountPath: "/usr/src/app/thumbnail-app-acs-2025-3b06f94a8f55.json"
+          subPath: thumbnail-app-acs-2025-3b06f94a8f55.json
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      volumes:
+      - name: gcp-key
+        secret:
+          secretName: gcs-sa-key

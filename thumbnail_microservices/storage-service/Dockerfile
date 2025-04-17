@@ -1,11 +1,16 @@
+# Use Node.js LTS image
 FROM node:18
 
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-COPY . .
-
+# Install app dependencies
+COPY package*.json ./
 RUN npm install
 
-EXPOSE 3003
+# Bundle app source
+COPY . .
 
-CMD ["node", "index.cjs"]
+# Expose port and run the app
+EXPOSE 8080
+CMD ["node", "index.js"]
