@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const cors = require('cors'); // ✅ Added CORS
 const { Storage } = require('@google-cloud/storage');
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
@@ -9,27 +10,29 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Static frontend
+// ✅ Enable CORS globally (or restrict origin if needed)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(express.static('public'));
+app.use(express.json({ limit: '10mb' }));
 
-// Middleware
-app.use(express.json({ limit: '10mb' })); // Needed for /store
-
-// Multer setup
 const upload = multer({ storage: multer.memoryStorage() });
 
-// GCS setup
 const storage = new Storage({
   keyFilename: path.join(__dirname, 'thumbnail-app-acs-2025-3b06f94a8f55.json'),
 });
 const bucket = storage.bucket('thumbnail-uploads-acs');
 
-// Homepage
+// Routes
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// POST /upload — Image upload + resize
 app.post('/upload', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).send('No file uploaded.');
 
@@ -90,7 +93,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-// POST /store — Direct thumbnail storage from thumbnail-service
 app.post('/store', async (req, res) => {
   const { buffer, filename, user } = req.body;
 
@@ -113,7 +115,6 @@ app.post('/store', async (req, res) => {
   }
 });
 
-// GET /images — View uploaded images
 app.get('/images', async (req, res) => {
   try {
     const [files] = await bucket.getFiles();
@@ -155,7 +156,6 @@ app.get('/images', async (req, res) => {
   }
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Storage service running on port ${PORT}`);
 });
