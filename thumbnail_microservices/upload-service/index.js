@@ -16,7 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const upload = multer({ storage: multer.memoryStorage() });
 
-const THUMBNAIL_SERVICE_URL = 'https://thumbnail-service-dot-thumbnail-app-acs-2025.ey.r.appspot.com/process';
+const THUMBNAIL_SERVICE_URL = 'https://thumbnail-app-acs-2025.ey.r.appspot.com/process';
 
 app.use(express.static('public'));
 
@@ -37,6 +37,21 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     });
 
     const { thumbnails, base } = response.data;
+
+    // ✅ Validate that thumbnails exist
+    if (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) {
+      return res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head><title>Error</title></head>
+        <body>
+          <h2>❌ Failed to generate thumbnails.</h2>
+          <p>The image processing service did not return any thumbnails.</p>
+          <button onclick="window.location.href='/'">⬅️ Try Again</button>
+        </body>
+        </html>
+      `);
+    }
 
     const resultData = {
       originalName: req.file.originalname,
