@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: storage
-        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/storage-service
+        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/storage-service:V2
         ports:
         - containerPort: 8080
         env:
