@@ -80,6 +80,5 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Upload service running on port ${PORT}`);
-});
+const port = process.env.PORT || 3001;
+app.listen(port, () => console.log("Upload Service running on port " + port));
