@@ -20,3 +20,10 @@ spec:
         env:
         - name: THUMBNAIL_SERVICE_URL
           value: "http://thumbnail-service:80/process"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

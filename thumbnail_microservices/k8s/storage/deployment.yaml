@@ -36,6 +36,15 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10
+
+        resources:   # 👈 ADD THIS BLOCK
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+
       volumes:
       - name: gcp-key
         secret:
