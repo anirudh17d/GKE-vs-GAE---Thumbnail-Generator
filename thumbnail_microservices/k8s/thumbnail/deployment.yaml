@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: thumbnail
-        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/thumbnail-service:V4
+        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/thumbnail-service:V5
         ports:
         - containerPort: 8080
         env:
