@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: upload
-        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/upload-service:V4
+        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/upload-service:V5
         ports:
         - containerPort: 3001
         env:
