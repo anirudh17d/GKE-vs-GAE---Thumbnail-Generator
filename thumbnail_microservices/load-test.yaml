@@ -1,9 +1,11 @@
 config:
   target: "http://34.76.114.254"  # fixed target!
   phases:
-    - duration: 60  # Run for 5 minutes
-      arrivalRate: 100  # 1 new virtual user per second
- 
+    - duration: 60  # Run for 1 minute
+      arrivalRate: 30  # 100 new virtual users per second
+  http:
+    timeout: 60  # <-- New! Wait up to 60 seconds for server responses
+
 scenarios:
   - name: "Upload Image from Local Drive"
     flow:
@@ -13,6 +15,6 @@ scenarios:
             Accept: "application/json"
           formData:
             user: "testuser"
-            image: "C:/Benutzer/User/Downloads/Kubernetes.png"  # Specify the file directly
+            image: "C:/Users/pooja/Downloads/procedures.png"  # Specify the file directly
           expect:
             - statusCode: 200
