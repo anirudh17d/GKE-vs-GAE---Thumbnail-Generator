@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: storage
-        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/storage-service:V5
+        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/storage-service:V7
         ports:
         - containerPort: 8080
         env:
@@ -36,15 +36,13 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10
-
-        resources:   # 👈 ADD THIS BLOCK
+        resources:
           requests:
             cpu: 100m
             memory: 128Mi
           limits:
-            cpu: 200m
+            cpu: 500m
             memory: 256Mi
-
       volumes:
       - name: gcp-key
         secret:
