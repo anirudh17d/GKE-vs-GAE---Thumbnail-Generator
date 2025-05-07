@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thumbnail Generator</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Thumbnail Generator</h1>
+    <form id="uploadForm">
+      <input type="text" name="user" placeholder="Enter your name" required />
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Upload</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } else {
+        document.getElementById('message').innerText = 'Upload failed';
+      }
+    });
+  </script>
+</body>
+</html>

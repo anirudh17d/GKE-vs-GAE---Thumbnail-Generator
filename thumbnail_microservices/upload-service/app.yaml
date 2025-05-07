@@ -1,0 +1,10 @@
+service: upload-service
+runtime: custom
+env: flex
+
+env_variables:
+  THUMBNAIL_SERVICE_URL: https://thumbnail-service-dot-thumbnail-app-acs-2025.ey.r.appspot.com/process
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2

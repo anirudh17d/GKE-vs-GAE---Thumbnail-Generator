@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thumbnail-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thumbnail
+  template:
+    metadata:
+      labels:
+        app: thumbnail
+    spec:
+      containers:
+      - name: thumbnail
+        image: europe-docker.pkg.dev/thumbnail-app-acs-2025/thumbnail-repo/thumbnail-service:V7
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi

@@ -1,0 +1,18 @@
+config:
+  target: "http://34.76.114.254"  # fixed target!
+  phases:
+    - duration: 60  # Run for 5 minutes
+      arrivalRate: 100  # 1 new virtual user per second
+ 
+scenarios:
+  - name: "Upload Image from Local Drive"
+    flow:
+      - post:
+          url: "/storage"
+          headers:
+            Accept: "application/json"
+          formData:
+            user: "testuser"
+            image: "C:/Users/Pooja/Downloads/multiplayer.png"  # Specify the file directly
+s          expect:
+            - statusCode: 200
